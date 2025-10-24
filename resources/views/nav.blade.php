@@ -20,22 +20,44 @@
                     <a class="nav-link @active('contact')" href="{{ url('contact') }}">Contact</a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link @active('blog')" href="{{ route('blog') }}">Blog</a>
-                </li>
+
+
+                @auth
 
                 <li class="nav-item">
-                    <a class="nav-link @active('blog.create')" href="{{ route('blog.create') }}">Create post</a>
-                </li>
+                        <a class="nav-link @active('dashboard')" href="{{ route('dashboard') }}">Dashboard</a>
+                    </li>
 
-                {{-- categories --}}
-                <li class="nav-item">
-                    <a class="nav-link @active('categories*')" href="{{ route('categories.index') }}">Categories</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link @active('blog')" href="{{ route('blog') }}">Blog</a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link @active('auth*')" href="{{ route('auth.register') }}">Register</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link @active('blog.create')" href="{{ route('blog.create') }}">Create post</a>
+                    </li>
+
+                    {{-- categories --}}
+                    <li class="nav-item">
+                        <a class="nav-link @active('categories*')" href="{{ route('categories.index') }}">Categories</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link @active('auth.logout')" href="{{ route('auth.logout') }}">Logout</a>
+                    </li>
+
+                @endauth
+
+                @guest
+
+                    <li class="nav-item">
+                        <a class="nav-link @active('auth.register')" href="{{ route('auth.register') }}">Register</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link @active('auth.login')" href="{{ route('auth.login') }}">Login</a>
+                    </li>
+
+                @endguest
 
             </ul>
 

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\user\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -42,4 +43,12 @@ Route::prefix('auth')
         Route::view('register', 'auth.register')->name('register');
         Route::post('register', 'register')->name('save_register');
 
+        Route::view('login', 'auth.login')->name('login');
+
+        Route::post('login', 'login')->name('do_login');
+
     });
+
+Route::get('auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
+
+Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
