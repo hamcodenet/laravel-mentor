@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\user\DashboardController;
+use App\Http\Middleware\AuthMiddleware;
+use App\Http\Middleware\GuestMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,25 +20,27 @@ Route::get('about', function () {
     return view('about');
 })->name('about');
 
-Route::get('blog', [PostController::class, 'index'])->name('blog');
+Route::middleware(AuthMiddleware::class)
+    ->group(function () {
 
-Route::get('post/{id}', [PostController::class, 'view'])->name('blog.view');
+        Route::get('blog', [PostController::class, 'index'])->name('blog');
+        Route::get('post/{id}', [PostController::class, 'view'])->name('blog.view');
+        Route::get('blog/create', [PostController::class, 'create'])->name('blog.create');
+        Route::post('blog/create', [PostController::class, 'save'])->name('blog.save');
+        Route::get('blog/{id}/delete', [PostController::class, 'delete'])->name('blog.delete');
+        Route::get('blog/{id}/edit', [PostController::class, 'edit'])->name('blog.edit');
+        Route::post('blog/{id}/edit', [PostController::class, 'update'])->name('blog.update');
 
+        Route::get('blog/{post}/detach_tag/{tag}', [PostController::class, 'detachTag'])->name('blog.detach_tag');
 
-Route::get('blog/create', [PostController::class, 'create'])->name('blog.create');
-Route::post('blog/create', [PostController::class, 'save'])->name('blog.save');
-Route::get('blog/{id}/delete', [PostController::class, 'delete'])->name('blog.delete');
-Route::get('blog/{id}/edit', [PostController::class, 'edit'])->name('blog.edit');
-Route::post('blog/{id}/edit', [PostController::class, 'update'])->name('blog.update');
+        Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
 
-Route::get('blog/{post}/detach_tag/{tag}', [PostController::class, 'detachTag'])->name('blog.detach_tag');
+        Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
-
-Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
-
-
+    });
 
 Route::prefix('auth')
+    ->middleware(GuestMiddleware::class)
     ->controller(AuthController::class)
     ->name('auth.')
     ->group(function () {
@@ -50,5 +54,3 @@ Route::prefix('auth')
     });
 
 Route::get('auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
-
-Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
