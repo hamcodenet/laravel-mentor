@@ -6,6 +6,9 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\user\DashboardController;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\GuestMiddleware;
+use App\Mail\TestMail;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -54,3 +57,14 @@ Route::prefix('auth')
     });
 
 Route::get('auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
+
+
+
+Route::get('mail', function () {
+
+    $user = User::first();
+
+    $url = "https://hamcode.net";
+
+    Mail::to($user)->send(new TestMail($url));
+});
